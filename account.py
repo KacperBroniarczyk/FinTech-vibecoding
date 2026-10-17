@@ -34,19 +34,19 @@ class BankAccount:
 
     def deposit(self, amount: Decimal)->None:
         if amount <= Decimal("0.00"):
-            raise InvalidTransactionAmountError
-        else:
-            self._balance += amount
-            self._history.append(Transaction(amount, "DEPOSIT", datetime.now(timezone.utc)))
+            raise InvalidTransactionAmountError("Invalid transaction amount")
+
+        self._balance += amount
+        self._history.append(Transaction(amount, "DEPOSIT", datetime.now(timezone.utc)))
 
     def withdraw(self, amount: Decimal)->None:
         if amount <= Decimal("0.00"):
-            raise InvalidTransactionAmountError
-        elif amount > self.balance:
-            raise InsufficientFundsError
-        else:
-            self._balance -= amount
-            self._history.append(Transaction(amount, "WITHDRAWAL", datetime.now(timezone.utc)))
+            raise InvalidTransactionAmountError("Invalid transaction amount")
+        if amount > self.balance:
+            raise InsufficientFundsError("Insufficient funds")
+
+        self._balance -= amount
+        self._history.append(Transaction(amount, "WITHDRAWAL", datetime.now(timezone.utc)))
 
     def get_history(self)->list[Transaction]:
         return self._history.copy()
